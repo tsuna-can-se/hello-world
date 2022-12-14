@@ -13,7 +13,7 @@ jobs:
   ci:
     name: パッケージのビルドとテスト
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
+    if: github.event_name == 'pull_request'
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -55,10 +55,20 @@ jobs:
   packaging:
     name: パッケージング
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: test
         run: |
+          pre_release=false
+          if [[ $tagname == *"Beta"* ]]; then
+            pre_release=true
+          fi
+          echo "is_pre_release=$pre_release" >> $GITHUB_ENV
+          echo "package_version=${{ github.ref_name }}" >> $GITHUB_ENV
+          
           echo 'github.event_name:${{ github.event_name }}'
           echo 'github.ref:${{ github.ref }}'
           echo 'github.ref_name:${{ github.ref_name }}'
           
+          echo "is_pre_release:${{ env.is_pre_release }}"
+          echo "package_version:${{ env.package_version }}"
