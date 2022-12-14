@@ -60,9 +60,10 @@ jobs:
       - name: test
         run: |
           pre_release=false
-          if [[ $tagname == *"Beta"* ]]; then
+          if [[ "${{ github.ref_name }}" == *"Beta"* ]]; then
             pre_release=true
           fi
+          echo "is_pre_release:$pre_release"
           echo "is_pre_release=$pre_release" >> $GITHUB_ENV
           echo "package_version=${{ github.ref_name }}" >> $GITHUB_ENV
           
