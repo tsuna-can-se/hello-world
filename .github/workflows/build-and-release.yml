@@ -87,7 +87,18 @@ jobs:
     needs: packaging
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
-      - name: test3
+      - id: create-github-release
+        name: Github のリリース作成
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          name: "${{ needs.packaging.outputs.package_version }}"
+          prerelease: ${{ needs.packaging.outputs.is_pre_release }}
+          tag_name: "${{ needs.packaging.outputs.package_version }}"
+      - name: GitHub のリリース結果表示
         run: |
-          echo "is_pre_release:${{ needs.packaging.outputs.is_pre_release }}"
-          echo "package_version:${{ needs.packaging.outputs.package_version }}"
+          echo "Is pre-release:${{ needs.packaging.outputs.is_pre_release }}"
+          echo "Package version:${{ needs.packaging.outputs.package_version }}"
+          echo "Release page URL:${{ steps.create-github-release.outputs.url }}"
+          echo "# GitHub release info" >> $GITHUB_STEP_SUMMARY
+          echo "Release page URL: <${{ steps.create-github-release.outputs.url }}>" >> $GITHUB_STEP_SUMMARY
