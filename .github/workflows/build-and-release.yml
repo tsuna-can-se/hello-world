@@ -129,6 +129,9 @@ jobs:
         name: Github のリリース作成
         uses: softprops/action-gh-release@v1
         with:
+          files: |
+            *.nupkg
+            *.snupkg
           generate_release_notes: true
           name: "${{ needs.packaging.outputs.package_version }}"
           prerelease: ${{ needs.packaging.outputs.is_pre_release }}
