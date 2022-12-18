@@ -75,10 +75,10 @@ jobs:
           echo "package_version=${{ github.ref_name }}" >> $GITHUB_ENV
           echo "package_version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
           
-      - name: test2
+      - name: NuGet パッケージの作成
         run: |
-          echo "is_pre_release:${{ env.is_pre_release }}"
-          echo "package_version:${{ env.package_version }}"
+          mkdir packages
+          dotnet pack ./src/TsunaCan.HelloWorld/TsunaCan.HelloWorld.csproj --configuration Release --output packages -p:PackageVersion=${{ env.package_version }} -p:Version=${{ env.package_version }} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
 
   release-to-github:
