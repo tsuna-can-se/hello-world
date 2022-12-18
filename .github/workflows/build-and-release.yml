@@ -62,6 +62,7 @@ jobs:
     outputs:
       is_pre_release: ${{ steps.setup-variables.outputs.is_pre_release }}
       package_version: ${{ steps.setup-variables.outputs.package_version }}
+      file_version: ${{ steps.setup-variables.outputs.file_version }}
 
     steps:
       - id: setup-variables
@@ -75,9 +76,15 @@ jobs:
           echo "is_pre_release=$pre_release" >> $GITHUB_ENV
           echo "is_pre_release=$pre_release" >> $GITHUB_OUTPUT
 
-          echo "package_version:${{ github.ref_name }}"
-          echo "package_version=${{ github.ref_name }}" >> $GITHUB_ENV
-          echo "package_version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          package_version="${{ github.ref_name }}"
+          echo "package_version:$package_version"
+          echo "package_version=$package_version" >> $GITHUB_ENV
+          echo "package_version=$package_version" >> $GITHUB_OUTPUT
+
+          file_version=${package_version:1}
+          echo "file_version:$file_version"
+          echo "file_version=$file_version" >> $GITHUB_ENV
+          echo "file_version=$file_version" >> $GITHUB_OUTPUT
 
       - name: ブランチのチェックアウト
         uses: actions/checkout@v3
@@ -93,7 +100,7 @@ jobs:
       - name: NuGet パッケージの作成
         run: |
           mkdir ${{ env.ARTIFACT_DIR }}
-          dotnet pack ./src/TsunaCan.HelloWorld/TsunaCan.HelloWorld.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --output ${{ env.ARTIFACT_DIR }} -p:PackageVersion=${{ env.package_version }} -p:Version=${{ env.package_version }} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+          dotnet pack ./src/TsunaCan.HelloWorld/TsunaCan.HelloWorld.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --output ${{ env.ARTIFACT_DIR }} -p:PackageVersion=${{ env.file_version }} -p:Version=${{ env.file_version }} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
       - name: ビルドアーティファクトのアップロード
         uses: actions/upload-artifact@v3
