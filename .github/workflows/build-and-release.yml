@@ -108,6 +108,10 @@ jobs:
         with:
           name: packages
 
+      - name: test
+        run: |
+          dir
+
       - id: create-github-release
         name: Github のリリース作成
         uses: softprops/action-gh-release@v1
