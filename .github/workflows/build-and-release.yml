@@ -163,4 +163,4 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY_FOR_TEST_SITE }}
         run: |
-          dotnet nuget push TsunaCan.HelloWorld.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source https://int.nugettest.org/v3/index.json
+          dotnet nuget push TsunaCan.HelloWorld.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source https://apiint.nugettest.org/v3/index.json
