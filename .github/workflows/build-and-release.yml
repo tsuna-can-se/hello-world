@@ -126,7 +126,7 @@ jobs:
           dir
 
       - id: create-github-release
-        name: Github のリリース作成
+        name: GitHub のリリース作成
         uses: softprops/action-gh-release@v1
         with:
           files: |
