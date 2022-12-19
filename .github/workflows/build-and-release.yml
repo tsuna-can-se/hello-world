@@ -170,3 +170,6 @@ jobs:
           LOG_FILE_NAME: nuget_push_log.txt
         run: |
           dotnet nuget push $PACKAGING_PROJECT_NAME.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source $NUGET_SOURCE > $LOG_FILE_NAME
+          cat $LOG_FILE_NAME
+          echo "# NuGet release info :toolbox:" >> $GITHUB_STEP_SUMMARY
+          cat $LOG_FILE_NAME >> $GITHUB_STEP_SUMMARY
