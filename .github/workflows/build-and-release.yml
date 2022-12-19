@@ -9,6 +9,11 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+env:
+  PACKAGING_PROJECT_NAME: TsunaCan.HelloWorld
+  TEST_PROJECT_NAME: Test.TsunaCan.HelloWorld
+  PACKAGE_ARTIFACT_NAME: packages
+
 jobs:
   ci:
     name: パッケージのビルドとテスト
@@ -39,7 +44,7 @@ jobs:
 
       - name: 単体テストの実行
         run: |
-          dotnet add tests/Test.TsunaCan.HelloWorld/Test.TsunaCan.HelloWorld.csproj package coverlet.msbuild
+          dotnet add tests/${{ env.TEST_PROJECT_NAME }}/${{ env.TEST_PROJECT_NAME }}.csproj package coverlet.msbuild
           dotnet test --no-build --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov > testResult.txt
           echo '# Build Result :gear:' >> $GITHUB_STEP_SUMMARY
           cat testResult.txt | sed -n -e '/Done/,/Elapsed/p' >> $GITHUB_STEP_SUMMARY
@@ -57,7 +62,6 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     env:
-      ARTIFACT_DIR: packages
       BUILD_CONFIGURATION: Release
     outputs:
       is_pre_release: ${{ steps.setup-variables.outputs.is_pre_release }}
@@ -99,14 +103,14 @@ jobs:
           
       - name: NuGet パッケージの作成
         run: |
-          mkdir ${{ env.ARTIFACT_DIR }}
-          dotnet pack ./src/TsunaCan.HelloWorld/TsunaCan.HelloWorld.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --output ${{ env.ARTIFACT_DIR }} -p:PackageVersion=${{ env.file_version }} -p:Version=${{ env.file_version }} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+          mkdir ${{ env.PACKAGE_ARTIFACT_NAME }}
+          dotnet pack ./src/${{ env.PACKAGING_PROJECT_NAME }}/${{ env.PACKAGING_PROJECT_NAME }}.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --output ${{ env.PACKAGE_ARTIFACT_NAME }} -p:PackageVersion=${{ env.file_version }} -p:Version=${{ env.file_version }} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
       - name: ビルドアーティファクトのアップロード
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.ARTIFACT_DIR }}
-          path: ${{ env.ARTIFACT_DIR }}/
+          name: ${{ env.PACKAGE_ARTIFACT_NAME }}
+          path: ${{ env.PACKAGE_ARTIFACT_NAME }}/
           retention-days: 7
 
   release-to-github:
@@ -119,7 +123,7 @@ jobs:
       - name: ビルドアーティファクトのダウンロード
         uses: actions/download-artifact@v3
         with:
-          name: packages
+          name: ${{ env.PACKAGE_ARTIFACT_NAME }}
 
       - id: create-github-release
         name: GitHub のリリース作成
@@ -151,7 +155,7 @@ jobs:
       - name: ビルドアーティファクトのダウンロード
         uses: actions/download-artifact@v3
         with:
-          name: packages
+          name: ${{ env.PACKAGE_ARTIFACT_NAME }}
 
       - name: .NET SDK のセットアップ
         uses: actions/setup-dotnet@v3
@@ -163,4 +167,4 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY_FOR_TEST_SITE }}
         run: |
-          dotnet nuget push TsunaCan.HelloWorld.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source https://apiint.nugettest.org/v3/index.json
+          dotnet nuget push ${{ env.PACKAGING_PROJECT_NAME }}.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source https://apiint.nugettest.org/v3/index.json
