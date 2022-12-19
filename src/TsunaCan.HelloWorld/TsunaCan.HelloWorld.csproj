@@ -1,27 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		
-		<PackageId>TsunaCan.HelloWorld</PackageId>
-		<Authors>masatsuna</Authors>
-		<Description>
-			This project is sample of NuGet package csharp project.
-			"Hello World" ASCII art string can be shown on the console.
-		</Description>
-		<Copyright>Copyright (c) 2022 masatsuna</Copyright>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/tsuna-can-se/hello-world</PackageProjectUrl>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageReleaseNotes>https://github.com/tsuna-can-se/hello-world/releases</PackageReleaseNotes>
-		<RepositoryUrl>https://github.com/tsuna-can-se/hello-world.git</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<RepositoryBranch>main</RepositoryBranch>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-	<ItemGroup>
-		<None Include="../../README.md" Pack="true" PackagePath="/"/>
-	</ItemGroup>
+    <PackageId>TsunaCan.HelloWorld</PackageId>
+    <Authors>masatsuna</Authors>
+    <Description>
+      This project is sample of NuGet package csharp project. "Hello World" ASCII art string can be shown on the console.
+    </Description>
+    <Copyright>Copyright (c) 2022 masatsuna</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/tsuna-can-se/hello-world</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>https://github.com/tsuna-can-se/hello-world/releases</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/tsuna-can-se/hello-world.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryBranch>main</RepositoryBranch>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
