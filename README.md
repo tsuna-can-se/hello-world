@@ -3,9 +3,7 @@
 This project is sample of NuGet package csharp project.
 "Hello World" ASCII art string can be shown on the console.
 
-## Getting Started
-
-### Installation
+## Installation
 
 On the Package Manager Console, execute the following command to install the NuGet package.
 
@@ -13,7 +11,9 @@ On the Package Manager Console, execute the following command to install the NuG
 Install-Package TsunaCan.HelloWorld
 ```
 
-### Echo Hello World
+## Usage
+
+Create console application project and call static methods of `TsunaCan.HelloWorld.Echo` class.
 
 ```csharp
 using TsunaCan.HelloWorld;
