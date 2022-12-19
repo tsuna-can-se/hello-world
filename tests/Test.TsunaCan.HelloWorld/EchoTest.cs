@@ -1,4 +1,4 @@
-using TsunaCan.HelloWorld;
+﻿using TsunaCan.HelloWorld;
 
 namespace Test.TsunaCan.HelloWorld
 {
@@ -23,7 +23,7 @@ namespace Test.TsunaCan.HelloWorld
             Assert.Equal("  ##  ##   #######    ##    ##   ##    ##  ## ", reader.ReadLine());
             Assert.Equal("  ##  ##   ##     #   ##    ##   ##    ##     ", reader.ReadLine());
             Assert.Equal(" ###  ###   ######   ####  ####   ######   ## ", reader.ReadLine());
-            Assert.Equal("", reader.ReadLine());
+            Assert.Equal(string.Empty, reader.ReadLine());
             Assert.True(reader.EndOfStream);
         }
 
@@ -46,7 +46,7 @@ namespace Test.TsunaCan.HelloWorld
             Assert.Equal(" ########  ##    ##   ##       ##   ##    ##  ", reader.ReadLine());
             Assert.Equal(" ###  ###  ##    ##   ##       ##   ##   ###  ", reader.ReadLine());
             Assert.Equal(" ##    ##   ######   ####     ####   ##### ## ", reader.ReadLine());
-            Assert.Equal("", reader.ReadLine());
+            Assert.Equal(string.Empty, reader.ReadLine());
             Assert.True(reader.EndOfStream);
         }
     }
