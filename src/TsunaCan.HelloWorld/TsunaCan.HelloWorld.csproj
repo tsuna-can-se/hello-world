@@ -3,12 +3,11 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		
+
 		<PackageId>TsunaCan.HelloWorld</PackageId>
 		<Authors>masatsuna</Authors>
 		<Description>
-			This project is sample of NuGet package csharp project.
-			"Hello World" ASCII art string can be shown on the console.
+			This project is sample of NuGet package csharp project.	"Hello World" ASCII art string can be shown on the console.
 		</Description>
 		<Copyright>Copyright (c) 2022 masatsuna</Copyright>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
