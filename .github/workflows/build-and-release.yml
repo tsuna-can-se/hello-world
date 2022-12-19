@@ -142,7 +142,7 @@ jobs:
           echo "Is pre-release:${{ needs.packaging.outputs.is_pre_release }}"
           echo "Package version:${{ needs.packaging.outputs.package_version }}"
           echo "Release page URL:${{ steps.create-github-release.outputs.url }}"
-          echo "# GitHub release info" >> $GITHUB_STEP_SUMMARY
+          echo "# GitHub release info :octocat:" >> $GITHUB_STEP_SUMMARY
           echo "Release page URL: <${{ steps.create-github-release.outputs.url }}>" >> $GITHUB_STEP_SUMMARY
 
   release-to-nuget:
