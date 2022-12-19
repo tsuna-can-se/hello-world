@@ -40,12 +40,12 @@ jobs:
         run: dotnet restore
 
       - name: アプリケーションのビルド
-        run: dotnet build --no-restore --configuration ${{ env.BUILD_CONFIGURATION }}
+        run: dotnet build --no-restore --configuration $BUILD_CONFIGURATION
 
       - name: 単体テストの実行
         run: |
-          dotnet add tests/${{ env.TEST_PROJECT_NAME }}/${{ env.TEST_PROJECT_NAME }}.csproj package coverlet.msbuild
-          dotnet test --no-build --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov > testResult.txt
+          dotnet add tests/$TEST_PROJECT_NAME/$TEST_PROJECT_NAME.csproj package coverlet.msbuild
+          dotnet test --no-build --verbosity normal --configuration $BUILD_CONFIGURATION /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov > testResult.txt
           echo '# Build Result :gear:' >> $GITHUB_STEP_SUMMARY
           cat testResult.txt | sed -n -e '/Done/,/Elapsed/p' >> $GITHUB_STEP_SUMMARY
           echo '' >> $GITHUB_STEP_SUMMARY
@@ -103,8 +103,8 @@ jobs:
           
       - name: NuGet パッケージの作成
         run: |
-          mkdir ${{ env.PACKAGE_ARTIFACT_NAME }}
-          dotnet pack ./src/${{ env.PACKAGING_PROJECT_NAME }}/${{ env.PACKAGING_PROJECT_NAME }}.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --output ${{ env.PACKAGE_ARTIFACT_NAME }} -p:PackageVersion=${{ env.file_version }} -p:Version=${{ env.file_version }} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+          mkdir $PACKAGE_ARTIFACT_NAME
+          dotnet pack ./src/$PACKAGING_PROJECT_NAME/$PACKAGING_PROJECT_NAME.csproj --configuration $BUILD_CONFIGURATION --output $PACKAGE_ARTIFACT_NAME -p:PackageVersion=$file_version -p:Version=$file_version -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
       - name: ビルドアーティファクトのアップロード
         uses: actions/upload-artifact@v3
@@ -166,5 +166,7 @@ jobs:
       - name: NuGet パッケージの公開
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY_FOR_TEST_SITE }}
+          NUGET_SOURCE: https://apiint.nugettest.org/v3/index.json
+          LOG_FILE_NAME: nuget_push_log.txt
         run: |
-          dotnet nuget push ${{ env.PACKAGING_PROJECT_NAME }}.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source https://apiint.nugettest.org/v3/index.json
+          dotnet nuget push $PACKAGING_PROJECT_NAME.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source $NUGET_SOURCE > $LOG_FILE_NAME
