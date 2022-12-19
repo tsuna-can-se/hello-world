@@ -165,8 +165,8 @@ jobs:
 
       - name: NuGet パッケージの公開
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY_FOR_TEST_SITE }}
-          NUGET_SOURCE: https://apiint.nugettest.org/v3/index.json
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_SOURCE: https://api.nuget.org/v3/index.json
           LOG_FILE_NAME: nuget_push_log.txt
         run: |
           dotnet nuget push $PACKAGING_PROJECT_NAME.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source $NUGET_SOURCE > $LOG_FILE_NAME
