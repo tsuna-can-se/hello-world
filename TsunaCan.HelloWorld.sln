@@ -9,10 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{241D11E3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TsunaCan.HelloWorld", "src\TsunaCan.HelloWorld\TsunaCan.HelloWorld.csproj", "{330EC5F9-F96A-459F-BBCB-B792F99E211D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.TsunaCan.HelloWorld", "tests\Test.TsunaCan.HelloWorld\Test.TsunaCan.HelloWorld.csproj", "{ADD8FA85-5FF7-487B-8D0E-89EA34CC65A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.TsunaCan.HelloWorld", "tests\Test.TsunaCan.HelloWorld\Test.TsunaCan.HelloWorld.csproj", "{ADD8FA85-5FF7-487B-8D0E-89EA34CC65A3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{493E6E35-7F30-4FAA-8515-FEEFECCADCB1}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.Packages.props = Directory.Packages.props
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
