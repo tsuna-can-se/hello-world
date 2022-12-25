@@ -1,4 +1,7 @@
-﻿using TsunaCan.HelloWorld;
+﻿using System;
+using System.IO;
+using TsunaCan.HelloWorld;
+using Xunit;
 
 namespace Test.TsunaCan.HelloWorld
 {
@@ -7,47 +10,55 @@ namespace Test.TsunaCan.HelloWorld
         [Fact]
         public void HelloTest()
         {
-            using var stream = new MemoryStream();
-            using var writer = new StreamWriter(stream);
-            Console.SetOut(writer);
+            using (var stream = new MemoryStream())
+            using (var writer = new StreamWriter(stream))
+            {
+                Console.SetOut(writer);
 
-            Echo.Hello();
+                Echo.Hello();
 
-            writer.Flush();
-            stream.Position = 0;
-            using var reader = new StreamReader(stream);
-            Assert.Equal(" ###  ###            ###   ###             ## ", reader.ReadLine());
-            Assert.Equal("  ##  ##              ##    ##             ## ", reader.ReadLine());
-            Assert.Equal("  ##  ##    ######    ##    ##    ######   ## ", reader.ReadLine());
-            Assert.Equal("  ######   ##    ##   ##    ##   ##    ##  ## ", reader.ReadLine());
-            Assert.Equal("  ##  ##   #######    ##    ##   ##    ##  ## ", reader.ReadLine());
-            Assert.Equal("  ##  ##   ##     #   ##    ##   ##    ##     ", reader.ReadLine());
-            Assert.Equal(" ###  ###   ######   ####  ####   ######   ## ", reader.ReadLine());
-            Assert.Equal(string.Empty, reader.ReadLine());
-            Assert.True(reader.EndOfStream);
+                writer.Flush();
+                stream.Position = 0;
+                using (var reader = new StreamReader(stream))
+                {
+                    Assert.Equal(" ###  ###            ###   ###             ## ", reader.ReadLine());
+                    Assert.Equal("  ##  ##              ##    ##             ## ", reader.ReadLine());
+                    Assert.Equal("  ##  ##    ######    ##    ##    ######   ## ", reader.ReadLine());
+                    Assert.Equal("  ######   ##    ##   ##    ##   ##    ##  ## ", reader.ReadLine());
+                    Assert.Equal("  ##  ##   #######    ##    ##   ##    ##  ## ", reader.ReadLine());
+                    Assert.Equal("  ##  ##   ##     #   ##    ##   ##    ##     ", reader.ReadLine());
+                    Assert.Equal(" ###  ###   ######   ####  ####   ######   ## ", reader.ReadLine());
+                    Assert.Equal(string.Empty, reader.ReadLine());
+                    Assert.True(reader.EndOfStream);
+                }
+            }
         }
 
         [Fact]
         public void WorldTest()
         {
-            using var stream = new MemoryStream();
-            using var writer = new StreamWriter(stream);
-            Console.SetOut(writer);
+            using (var stream = new MemoryStream())
+            using (var writer = new StreamWriter(stream))
+            {
+                Console.SetOut(writer);
 
-            Echo.World();
+                Echo.World();
 
-            writer.Flush();
-            stream.Position = 0;
-            using var reader = new StreamReader(stream);
-            Assert.Equal(" ##    ##                     ###        ###  ", reader.ReadLine());
-            Assert.Equal(" ##    ##                      ##         ##  ", reader.ReadLine());
-            Assert.Equal(" ##    ##   ######   ###  ##   ##    #### ##  ", reader.ReadLine());
-            Assert.Equal(" ## ## ##  ##    ##   ####     ##   ##   ###  ", reader.ReadLine());
-            Assert.Equal(" ########  ##    ##   ##       ##   ##    ##  ", reader.ReadLine());
-            Assert.Equal(" ###  ###  ##    ##   ##       ##   ##   ###  ", reader.ReadLine());
-            Assert.Equal(" ##    ##   ######   ####     ####   ##### ## ", reader.ReadLine());
-            Assert.Equal(string.Empty, reader.ReadLine());
-            Assert.True(reader.EndOfStream);
+                writer.Flush();
+                stream.Position = 0;
+                using (var reader = new StreamReader(stream))
+                {
+                    Assert.Equal(" ##    ##                     ###        ###  ", reader.ReadLine());
+                    Assert.Equal(" ##    ##                      ##         ##  ", reader.ReadLine());
+                    Assert.Equal(" ##    ##   ######   ###  ##   ##    #### ##  ", reader.ReadLine());
+                    Assert.Equal(" ## ## ##  ##    ##   ####     ##   ##   ###  ", reader.ReadLine());
+                    Assert.Equal(" ########  ##    ##   ##       ##   ##    ##  ", reader.ReadLine());
+                    Assert.Equal(" ###  ###  ##    ##   ##       ##   ##   ###  ", reader.ReadLine());
+                    Assert.Equal(" ##    ##   ######   ####     ####   ##### ## ", reader.ReadLine());
+                    Assert.Equal(string.Empty, reader.ReadLine());
+                    Assert.True(reader.EndOfStream);
+                }
+            }
         }
     }
 }
