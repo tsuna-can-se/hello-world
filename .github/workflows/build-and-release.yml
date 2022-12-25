@@ -47,9 +47,18 @@ jobs:
         run: dotnet build --no-restore --configuration $BUILD_CONFIGURATION
 
       - name: 単体テストの実行
+        id: execute-unit-test
+        shell: bash
+        continue-on-error: true
+        run: dotnet test --no-build --verbosity normal --configuration $BUILD_CONFIGURATION /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov > testResult.txt
+
+      - name: 単体テストの結果表示
         shell: bash
         run: |
-          dotnet test --no-build --verbosity normal --configuration $BUILD_CONFIGURATION /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov > testResult.txt
+          cat testResult.txt
+          if [ '${{ steps.build_documents.outcome }}' == 'failure' ]; then
+            exit 1
+          fi
           echo '# Build Result :gear:' >> $GITHUB_STEP_SUMMARY
           cat testResult.txt | sed -n -e '/Done/,/Elapsed/p' >> $GITHUB_STEP_SUMMARY
           echo '' >> $GITHUB_STEP_SUMMARY
