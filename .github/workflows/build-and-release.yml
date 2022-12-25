@@ -49,7 +49,6 @@ jobs:
       - name: 単体テストの実行
         shell: bash
         run: |
-          dotnet add tests/$TEST_PROJECT_NAME/$TEST_PROJECT_NAME.csproj package coverlet.msbuild
           dotnet test --no-build --verbosity normal --configuration $BUILD_CONFIGURATION /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov > testResult.txt
           echo '# Build Result :gear:' >> $GITHUB_STEP_SUMMARY
           cat testResult.txt | sed -n -e '/Done/,/Elapsed/p' >> $GITHUB_STEP_SUMMARY
