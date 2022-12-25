@@ -56,7 +56,7 @@ jobs:
         shell: bash
         run: |
           cat testResult.txt
-          if [ '${{ steps.build_documents.outcome }}' == 'failure' ]; then
+          if [ '${{ steps.execute-unit-test.outcome }}' == 'failure' ]; then
             exit 1
           fi
           echo '# Build Result :gear:' >> $GITHUB_STEP_SUMMARY
