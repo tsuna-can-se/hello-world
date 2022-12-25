@@ -39,18 +39,15 @@ jobs:
           dotnet-quality: 'ga'
 
       - name: NuGet パッケージの復元
-        shell: bash
         run: dotnet restore
 
       - name: アプリケーションのビルド
-        shell: bash
         run: dotnet build --no-restore --configuration $BUILD_CONFIGURATION
 
       - name: 単体テストの実行
         id: execute-unit-test
-        shell: bash
         continue-on-error: true
-        run: dotnet test --no-build --verbosity normal --configuration $BUILD_CONFIGURATION /p:CollectCoverage=true /p:CoverletOutput=TestResults /p:CoverletOutputFormat=lcov > testResult.txt
+        run: dotnet test --no-build --verbosity normal --configuration $BUILD_CONFIGURATION /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov > testResult.txt
 
       - name: 単体テストの結果表示
         shell: bash
