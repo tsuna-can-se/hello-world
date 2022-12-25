@@ -50,7 +50,7 @@ jobs:
         id: execute-unit-test
         shell: bash
         continue-on-error: true
-        run: dotnet test --no-build --verbosity normal --configuration $BUILD_CONFIGURATION /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov > testResult.txt
+        run: dotnet test --no-build --verbosity normal --configuration $BUILD_CONFIGURATION /p:CollectCoverage=true /p:CoverletOutput=TestResults /p:CoverletOutputFormat=lcov > testResult.txt
 
       - name: 単体テストの結果表示
         shell: bash
