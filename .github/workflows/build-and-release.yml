@@ -17,7 +17,7 @@ env:
 jobs:
   ci:
     name: パッケージのビルドとテスト
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     env:
       DOTNET_NOLOGO: true
@@ -33,16 +33,21 @@ jobs:
       - name: .NET SDK のセットアップ
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: | 
+            6.0.x
+            7.0.x
           dotnet-quality: 'ga'
 
       - name: NuGet パッケージの復元
+        shell: bash
         run: dotnet restore
 
       - name: アプリケーションのビルド
+        shell: bash
         run: dotnet build --no-restore --configuration $BUILD_CONFIGURATION
 
       - name: 単体テストの実行
+        shell: bash
         run: |
           dotnet add tests/$TEST_PROJECT_NAME/$TEST_PROJECT_NAME.csproj package coverlet.msbuild
           dotnet test --no-build --verbosity normal --configuration $BUILD_CONFIGURATION /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov > testResult.txt
