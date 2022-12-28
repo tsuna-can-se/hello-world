@@ -52,7 +52,7 @@ jobs:
       - name: コードカバレッジのサマリー作成
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: **/TestResults/coverage.*.cobertura.xml
+          filename: tests/**/TestResults/coverage.*.cobertura.xml
           badge: true
           fail_below_min: true
           format: markdown
