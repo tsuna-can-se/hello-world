@@ -49,9 +49,23 @@ jobs:
         continue-on-error: true
         run: dotnet test --no-build --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=cobertura > testResult.txt
 
+      - name: コードカバレッジのサマリー作成
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: **/TestResults/coverage.*.cobertura.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '60 80'
+
       - name: 単体テストの結果表示
         shell: bash
         run: |
+          ls
           cat testResult.txt
           if [ '${{ steps.execute-unit-test.outcome }}' == 'failure' ]; then
             exit 1
