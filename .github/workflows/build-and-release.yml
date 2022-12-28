@@ -49,18 +49,28 @@ jobs:
         continue-on-error: true
         run: dotnet test --no-build --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=cobertura > testResult.txt
 
-      - name: コードカバレッジのサマリー作成
-        uses: irongut/CodeCoverageSummary@v1.3.0
+      - name: test
+        shell: bash
+        run: |
+          ls
+
+      - name: テスト結果のアップロード
+        uses: actions/upload-artifact@v3
         with:
-          filename: tests/**/TestResults/coverage.*.cobertura.xml
-          badge: true
-          fail_below_min: true
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '60 80'
+          name: TestResult
+          path: testResult.txt
+          retention-days: 7
+
+  ci-report:
+    name: パッケージのビルドとテストレポート表示
+    runs-on: ubuntu-latest
+    needs: ci
+
+    steps:
+      - name: テスト結果のダウンロード
+        uses: actions/download-artifact@v3
+        with:
+          name: TestResult
 
       - name: 単体テストの結果表示
         shell: bash
@@ -80,6 +90,19 @@ jobs:
           cat testResult.txt | sed -n -e '/| Module[ ]*| Line[ ]*| Branch[ ]*| Method[ ]*|/,/^$/p' | sed -e '$d'| sed -e '/+[-]*+[-]*+[-]*+[-]*+/d' | sed -e '2i| --- | --- | --- | --- |' >> $GITHUB_STEP_SUMMARY
           echo '' >> $GITHUB_STEP_SUMMARY
           cat testResult.txt | sed -n -e '/|[ ]*| Line[ ]*| Branch[ ]*| Method[ ]*|/,/^$/p' | sed -e '$d'| sed -e '/+[-]*+[-]*+[-]*+[-]*+/d' | sed -e '2i| --- | --- | --- | --- |' >> $GITHUB_STEP_SUMMARY
+
+      - name: コードカバレッジのサマリー作成
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: tests/**/TestResults/coverage.*.cobertura.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '60 80'
 
   packaging:
     name: パッケージング
