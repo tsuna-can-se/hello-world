@@ -52,13 +52,20 @@ jobs:
       - name: test
         shell: bash
         run: |
-          ls
+          ls tests/Test.TsunaCan.HelloWorld/TestResults/
 
       - name: テスト結果のアップロード
         uses: actions/upload-artifact@v3
         with:
           name: TestResult
           path: testResult.txt
+          retention-days: 7
+
+      - name: コードカバレッジレポートのアップロード
+        uses: actions/upload-artifact@v3
+        with:
+          name: CoverageReports
+          path: tests/Test.TsunaCan.HelloWorld/TestResults/
           retention-days: 7
 
   ci-report:
@@ -71,6 +78,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: TestResult
+
+      - name: コードカバレッジレポートのダウンロード
+        uses: actions/download-artifact@v3
+        with:
+          name: CoverageReports
+          path: coverage-reports
 
       - name: 単体テストの結果表示
         shell: bash
@@ -94,7 +107,7 @@ jobs:
       - name: コードカバレッジのサマリー作成
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: tests/**/TestResults/coverage.*.cobertura.xml
+          filename: coverage-reports/**/TestResults/coverage.*.cobertura.xml
           badge: true
           fail_below_min: true
           format: markdown
