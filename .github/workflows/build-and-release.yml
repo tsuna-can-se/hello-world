@@ -94,7 +94,7 @@ jobs:
         shell: bash
         run: |
           echo '## Coverage :triangular_ruler:' >> $GITHUB_STEP_SUMMARY
-          sed -i s/'# Summary'/'${{ matrix.framework_version }} on ${{ matrix.vm_image }}'/g CoverageReport/SummaryGithub.md
+          sed -i s/'# Summary'/'Coverage report of ${{ matrix.framework_version }} on ${{ matrix.vm_image }}.'/g CoverageReport/SummaryGithub.md
           sed -i -e '/^#/d' CoverageReport/SummaryGithub.md
           cat CoverageReport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
 
