@@ -58,7 +58,7 @@ jobs:
         continue-on-error: true
         run: |
           dotnet test --no-build --logger trx --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=cobertura > testResult.txt
-          dir tests/Test.TsunaCan.HelloWorld/TestResults
+          pwd;find . | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'
 
       - name: テスト結果の表示(ヘッダー)
         shell: bash
@@ -87,13 +87,13 @@ jobs:
         with:
           reports: '**/TestResults/coverage.*.cobertura.xml'
           targetdir: 'CoverageReport'
-          reporttypes: 'MarkdownSummary;MarkdownSummaryGithub;MarkdownDeltaSummary'
+          reporttypes: 'MarkdownSummaryGithub' #MarkdownSummary / MarkdownSummaryGithub / MarkdownDeltaSummary
 
       - name: コードカバレッジレポートのアップロード
         uses: actions/upload-artifact@v3
         if: ${{ success() || (failure() && steps.create-coverage-report.conclusion == 'failure') }}
         with:
-          name: CoverageReport
+          name: 'CoverageReport-${{ matrix.vm_image }}-${{ matrix.framework_version }}'
           path: CoverageReport
           retention-days: 7
 
