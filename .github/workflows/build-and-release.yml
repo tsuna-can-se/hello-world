@@ -68,8 +68,8 @@ jobs:
           path-replace-backslashes: 'true'
           reporter: 'dotnet-trx'
           only-summary: 'false'
-          list-suites: 'all' # all / failed
-          list-tests: 'all' # all / failed / none
+          list-suites: 'all'
+          list-tests: 'all'
           max-annotations: '10'
           fail-on-error: 'true'
 
@@ -88,9 +88,10 @@ jobs:
         with:
           reports: '**/TestResults/*/coverage.cobertura.xml'
           targetdir: 'CoverageReport'
-          reporttypes: 'MarkdownSummaryGithub' #MarkdownSummary / MarkdownSummaryGithub / MarkdownDeltaSummary
+          reporttypes: 'MarkdownSummaryGithub'
 
       - name: コードカバレッジの結果表示
+        if: ${{ success() || (failure() && steps.execute-unit-test.conclusion == 'failure') }}
         shell: bash
         run: |
           echo '## Coverage :triangular_ruler:' >> $GITHUB_STEP_SUMMARY
@@ -100,7 +101,7 @@ jobs:
 
       - name: コードカバレッジの結果をPull-requestに表示
         uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request'
+        if: ${{ github.event_name == 'pull_request' && (success() || (failure() && steps.execute-unit-test.conclusion == 'failure')) }}
         with:
           recreate: true
           path: CoverageReport/SummaryGithub.md
@@ -142,12 +143,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      - name: .NET SDK のセットアップ
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '6.0.x'
-          dotnet-quality: 'ga'
           
       - name: NuGet パッケージの作成
         run: |
@@ -204,12 +199,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.PACKAGE_ARTIFACT_NAME }}
-
-      - name: .NET SDK のセットアップ
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '6.0.x'
-          dotnet-quality: 'ga'
 
       - name: NuGet パッケージの公開
         env:
