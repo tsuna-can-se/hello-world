@@ -56,7 +56,9 @@ jobs:
       - name: 単体テストの実行
         id: execute-unit-test
         continue-on-error: true
-        run: dotnet test --no-build --logger trx --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=cobertura > testResult.txt
+        run: |
+          dotnet test --no-build --logger trx --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=cobertura > testResult.txt
+          dir tests/Test.TsunaCan.HelloWorld/TestResults
 
       - name: テスト結果の表示(ヘッダー)
         shell: bash
