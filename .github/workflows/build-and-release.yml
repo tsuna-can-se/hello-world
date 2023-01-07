@@ -90,13 +90,18 @@ jobs:
           targetdir: 'CoverageReport'
           reporttypes: 'MarkdownSummaryGithub' #MarkdownSummary / MarkdownSummaryGithub / MarkdownDeltaSummary
 
-      - name: コードカバレッジレポートのアップロード
-        uses: actions/upload-artifact@v3
-        if: ${{ success() || (failure() && steps.create-coverage-report.conclusion == 'failure') }}
+      - name: コードカバレッジの結果表示
+        shell: bash
+        run: |
+          echo '## Coverage :triangular_ruler:' >> $GITHUB_STEP_SUMMARY
+          cat CoverageReport/SummaryGithub.md | sed '/^#/d' >> $GITHUB_STEP_SUMMARY
+
+      - name: コードカバレッジの結果をPull-requestに表示
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
         with:
-          name: 'CoverageReport-${{ matrix.vm_image }}-${{ matrix.framework_version }}'
-          path: CoverageReport
-          retention-days: 7
+          recreate: true
+          path: CoverageReport/SummaryGithub.md
 
 #      - name: ビルド結果のアップロード
 #        uses: actions/upload-artifact@v3
