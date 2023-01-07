@@ -94,7 +94,9 @@ jobs:
         shell: bash
         run: |
           echo '## Coverage :triangular_ruler:' >> $GITHUB_STEP_SUMMARY
-          cat CoverageReport/SummaryGithub.md | sed '/^#/d' >> $GITHUB_STEP_SUMMARY
+          sed -i s/'# Summary'/'${{ matrix.framework_version }} on ${{ matrix.vm_image }}'/g CoverageReport/SummaryGithub.md
+          sed -i -e '/^#/d' CoverageReport/SummaryGithub.md
+          cat CoverageReport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
 
       - name: コードカバレッジの結果をPull-requestに表示
         uses: marocchino/sticky-pull-request-comment@v2
@@ -102,97 +104,6 @@ jobs:
         with:
           recreate: true
           path: CoverageReport/SummaryGithub.md
-
-#      - name: ビルド結果のアップロード
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: BuildResult
-#          path: build-result.txt
-#          retention-days: 7
-
-#      - name: テスト結果のアップロード
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: TestResult
-#          path: testResult.txt
-#          retention-days: 7
-
-#      - name: テスト結果のアップロード2
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: TestResult2
-#          path: tests/Test.TsunaCan.HelloWorld/TestResults/*.trx
-#          retention-days: 7
-
-#      - name: コードカバレッジレポートのアップロード
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: CoverageReports
-#          path: tests/Test.TsunaCan.HelloWorld/TestResults/coverage.*.cobertura.xml
-#          retention-days: 7
-
-#  ci-report:
-#    name: パッケージのビルドとテストレポート表示
-#    runs-on: ubuntu-latest
-#    needs: ci
-
-#    steps:
-#      - name: ビルド結果のダウンロード
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: BuildResult
-
-#      - name: テスト結果のダウンロード
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: TestResult
-
-#      - name: テスト結果のダウンロード2
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: TestResult2
-
-#      - name: コードカバレッジレポートのダウンロード
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: CoverageReports
-#          path: coverage-reports
-
-#      - name: 単体テストの結果表示
-#        shell: bash
-#        run: |
-#          echo '# Build Result :gear:' >> $GITHUB_STEP_SUMMARY
-#          cat build-result.txt >> $GITHUB_STEP_SUMMARY
-#          echo '' >> $GITHUB_STEP_SUMMARY
-#          echo '# Test Result :memo:' >> $GITHUB_STEP_SUMMARY
-#          cat testResult.txt | sed -n -e '/A total of/,/Passed/p' >> $GITHUB_STEP_SUMMARY
-#          echo '' >> $GITHUB_STEP_SUMMARY
-
-#      - name: コードカバレッジのサマリー作成
-#        uses: irongut/CodeCoverageSummary@v1.3.0
-#        with:
-#          filename: coverage-reports/**/coverage.*.cobertura.xml
-#          badge: true
-#          fail_below_min: true
-#          format: markdown
-#          hide_branch_rate: false
-#          hide_complexity: false
-#          indicators: true
-#          output: both
-#          thresholds: '60 80'
-
-#      - name: コードカバレッジの結果表示
-#        shell: bash
-#        run: |
-#          echo '# Coverage :triangular_ruler:' >> $GITHUB_STEP_SUMMARY
-#          cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
-
-#      - name: コードカバレッジの結果をPull-requestに表示
-#        uses: marocchino/sticky-pull-request-comment@v2
-#        if: github.event_name == 'pull_request'
-#        with:
-#          recreate: true
-#          path: code-coverage-results.md
 
   packaging:
     name: パッケージング
