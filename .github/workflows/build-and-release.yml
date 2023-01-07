@@ -57,16 +57,11 @@ jobs:
         id: execute-unit-test
         continue-on-error: true
         run: |
-          dotnet test --no-build --logger trx --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=cobertura > testResult.txt
+          dotnet test --no-build --logger trx --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} --collect "XPlat Code Coverage" > testResult.txt
           pwd;find . | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'
 
-      - name: テスト結果の表示(ヘッダー)
-        shell: bash
-        if: ${{ success() || (failure() && steps.execute-unit-test.conclusion == 'failure') }}
-        run: |
-          echo '## Test Result :memo:' >> $GITHUB_STEP_SUMMARY
-
-      - name: テスト結果の表示(本体)
+      - id: create-test-result-report
+        name: テスト結果ページの作成
         uses: dorny/test-reporter@v1
         if: ${{ success() || (failure() && steps.execute-unit-test.conclusion == 'failure') }}
         with:
@@ -80,12 +75,20 @@ jobs:
           max-annotations: '10'
           fail-on-error: 'true'
 
+      - name: テスト結果のサマリー表示
+        shell: bash
+        if: ${{ success() || (failure() && steps.execute-unit-test.conclusion == 'failure') }}
+        run: |
+          echo '## Test Result :memo:' >> $GITHUB_STEP_SUMMARY
+          echo 'Test was a ${{ steps.create-test-result-report.outputs.conclusion }}.'
+          echo 'Completed in ${{ steps.create-test-result-report.outputs.time }}ms with ${{ steps.create-test-result-report.outputs.passed }} passed, ${{ steps.create-test-result-report.outputs.failed }} failed and ${{ steps.create-test-result-report.outputs.skipped }} skipped.'
+
       - id: create-coverage-report
         name: コードカバレッジレポートの解析
         uses: danielpalme/ReportGenerator-GitHub-Action@5
         if: ${{ success() || (failure() && steps.execute-unit-test.conclusion == 'failure') }}
         with:
-          reports: '**/TestResults/coverage.*.cobertura.xml'
+          reports: '**/TestResults/*/coverage.cobertura.xml'
           targetdir: 'CoverageReport'
           reporttypes: 'MarkdownSummaryGithub' #MarkdownSummary / MarkdownSummaryGithub / MarkdownDeltaSummary
 
