@@ -1,9 +1,9 @@
 name: テストの結果表示
 
 on:
-  workflow_run: 
+  workflow_run:
     workflows: [ビルドと単体テスト]
-    types: 
+    types:
       - completed
 
 permissions:
@@ -66,4 +66,3 @@ jobs:
         with:
           recreate: true
           path: CoverageReport/SummaryGithub.md
-    
