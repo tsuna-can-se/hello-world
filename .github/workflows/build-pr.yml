@@ -1,0 +1,55 @@
+name: ビルドと単体テスト
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+  
+jobs:
+  ci:
+    name: パッケージのビルドとテスト
+  
+    strategy:
+      fail-fast: false
+      matrix:
+        vm_image: [ubuntu-latest, windows-latest]
+        framework_version: [net48, net6.0, net7.0]
+        exclude:
+          - vm_image: ubuntu-latest
+            framework_version: net48
+  
+    runs-on: ${{ matrix.vm_image }}
+   
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      BUILD_CONFIGURATION: Debug
+  
+    steps:
+      - name: ブランチのチェックアウト
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+  
+      - id: application-build
+        name: アプリケーションのビルド
+        run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} --verbosity minimal > build-result.txt
+  
+      - name: ビルド結果の表示
+        shell: bash
+        if: ${{ success() || (failure() && steps.application-build.conclusion == 'failure') }}
+        run: |
+          echo '## Build Result :gear:' >> $GITHUB_STEP_SUMMARY
+          cat build-result.txt | sed -n -e 's/^/> /p' >> $GITHUB_STEP_SUMMARY
+  
+      - name: 単体テストの実行
+        id: execute-unit-test
+        continue-on-error: true
+        run: dotnet test --no-build --logger trx --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} --collect "XPlat Code Coverage"
+
+      - name: テスト結果のアップロード
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results-${{ matrix.vm_image }}-${{ matrix.framework_version }}
+          path: tests/Test.TsunaCan.HelloWorld/TestResults
+          retention-days: 1
