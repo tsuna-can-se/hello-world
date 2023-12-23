@@ -1,9 +1,9 @@
 name: テストの結果表示
 
 on:
-  workflow_run:
-    workflows: ['ビルドと単体テスト']
-    types:
+  workflow_run: 
+    workflows: [ビルドと単体テスト]
+    types: 
       - completed
 
 permissions:
