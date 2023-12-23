@@ -23,19 +23,11 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: テスト結果のダウンロード
-        uses: actions/download-artifact@v4
-        with:
-          pattern: unit-test-results-*
-          path: tests/Test.TsunaCan.HelloWorld/TestResults
-
-      - name: Display structure of downloaded files
-        run: ls -R tests/Test.TsunaCan.HelloWorld/TestResults
-
       - id: create-test-result-report
         name: テスト結果ページの作成
         uses: dorny/test-reporter@v1
         with:
+          artifact: /unit-test-results-(.*)/
           name: 'unit test results'
           path: '**/TestResults/*.trx'
           path-replace-backslashes: 'true'
