@@ -48,7 +48,7 @@ jobs:
         run: dotnet test --no-build --logger trx --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} --collect "XPlat Code Coverage"
 
       - name: テスト結果のアップロード
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: unit-test-results-${{ matrix.vm_image }}-${{ matrix.framework_version }}
           path: tests/Test.TsunaCan.HelloWorld/TestResults
