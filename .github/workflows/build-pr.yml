@@ -72,8 +72,8 @@ jobs:
           cat CoverageReport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
     
       - name: テスト結果のアップロード
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: unit-test-results-${{ matrix.vm_image }}-${{ matrix.framework_version }}
-          path: tests/Test.TsunaCan.HelloWorld/TestResults/${{ matrix.vm_image }}-${{ matrix.framework_version }}.trx
+          path: tests/Test.TsunaCan.HelloWorld/TestResults/
           retention-days: 1
