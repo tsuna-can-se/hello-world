@@ -5,9 +5,6 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
-permissions:
-  pull-requests: write
-
 jobs:
   ci:
     name: パッケージのビルドとテスト
@@ -74,13 +71,6 @@ jobs:
           sed -i -e '/^#/d' CoverageReport/SummaryGithub.md
           cat CoverageReport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
     
-      - name: コードカバレッジの結果をPull-requestに表示
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
-          recreate: true
-          path: CoverageReport/SummaryGithub.md
-
       - name: テスト結果のアップロード
         uses: actions/upload-artifact@v3
         with:
