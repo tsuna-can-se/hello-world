@@ -33,7 +33,7 @@ jobs:
   
       - id: application-build
         name: アプリケーションのビルド
-        run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} --verbosity minimal > build-result.txt
+        run: dotnet build --nologo --configuration ${{ env.BUILD_CONFIGURATION }} --verbosity minimal > build-result.txt
   
       - name: ビルド結果の表示
         shell: bash
@@ -45,7 +45,7 @@ jobs:
       - name: 単体テストの実行
         id: execute-unit-test
         continue-on-error: true
-        run: dotnet test --no-build --logger "trx;LogFileName=${{ matrix.vm_image }}-${{ matrix.framework_version }}.trx" --logger:"console;verbosity=minimal" --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} --collect "XPlat Code Coverage" > unit-test-result.txt
+        run: dotnet test --no-build --nologo --logger "trx;LogFileName=${{ matrix.vm_image }}-${{ matrix.framework_version }}.trx" --logger:"console;verbosity=minimal" --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} --collect "XPlat Code Coverage" > unit-test-result.txt
 
       - name: テスト結果のサマリー表示
         shell: bash
