@@ -33,6 +33,7 @@ jobs:
   
       - name: アプリケーションのビルド
         id: application-build
+        shell: bash
         continue-on-error: true
         run: |
           echo '## Build Result :gear:' >> $GITHUB_STEP_SUMMARY
@@ -43,6 +44,7 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY
   
       - name: ビルド失敗時の結果表示
+        shell: bash
         if: ${{ steps.application-build.conclusion == 'failure' }}
         run: |
           echo ':x: アプリケーションのビルドに失敗しました。  ' >> $GITHUB_STEP_SUMMARY
@@ -53,6 +55,7 @@ jobs:
   
       - name: 単体テストの実行
         id: run-unit-test
+        shell: bash
         continue-on-error: true
         run: |
           echo '## Test Result :memo:' >> $GITHUB_STEP_SUMMARY
@@ -63,6 +66,7 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: 単体テスト失敗時の結果表示
+        shell: bash
         if: ${{ steps.run-unit-test.conclusion == 'failure' }}
         run: |
           echo ':x: アプリケーションの単体テストに失敗しました。  ' >> $GITHUB_STEP_SUMMARY
