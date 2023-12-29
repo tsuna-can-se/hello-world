@@ -98,6 +98,6 @@ jobs:
           path: tests/Test.TsunaCan.HelloWorld/TestResults/
           retention-days: 1
 
-      - name: ビルドと単体テスト結果の確認
+      - name: 単体テスト結果の確認
         if: ${{ env.TEST_STATUS == 'Error' }}
         run: exit 1
