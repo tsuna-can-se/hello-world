@@ -13,11 +13,16 @@ jobs:
       fail-fast: false
       matrix:
         vm_image: [ubuntu-latest, windows-latest]
-        framework_version: [net48, net6.0, net7.0]
+        framework_version: [net48, net6.0, net8.0]
         exclude:
           - vm_image: ubuntu-latest
             framework_version: net48
-  
+        include:
+          - framework_version: net6.0
+            dotnet-sdk-version: 6.0.x  
+          - framework_version: net8.0
+            dotnet-sdk-version: 8.0.x  
+
     runs-on: ${{ matrix.vm_image }}
    
     env:
@@ -31,6 +36,13 @@ jobs:
         with:
           fetch-depth: 1
   
+      - name: dotnet SDK のセットアップ
+        if: ${{ matrix.dotnet-sdk-version }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet-sdk-version }}
+          dotnet-quality: 'ga'
+
       - name: アプリケーションのビルド
         id: application-build
         shell: bash
