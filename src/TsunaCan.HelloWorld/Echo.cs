@@ -20,7 +20,7 @@ namespace TsunaCan.HelloWorld
                 "  ##  ##   #######    ##    ##   ##    ##  ## \r\n" +
                 "  ##  ##   ##     #   ##    ##   ##    ##     \r\n" +
                 " ###  ###   ######   ####  ####   ######   ## \r\n";
-            Console.WriteLine(hello)
+            Console.WriteLine(hello);
         }
 
         /// <summary>
