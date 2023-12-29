@@ -31,29 +31,45 @@ jobs:
         with:
           fetch-depth: 1
   
-      - id: application-build
-        name: アプリケーションのビルド
-        run: dotnet build --nologo --configuration ${{ env.BUILD_CONFIGURATION }} --verbosity minimal > build-result.txt
-  
-      - name: ビルド結果の表示
-        shell: bash
-        if: ${{ success() || (failure() && steps.application-build.conclusion == 'failure') }}
+      - name: アプリケーションのビルド
+        id: application-build
+        continue-on-error: true
         run: |
           echo '## Build Result :gear:' >> $GITHUB_STEP_SUMMARY
-          cat build-result.txt | sed -n -e 's/^/> /p' >> $GITHUB_STEP_SUMMARY
+          dotnet build --nologo --configuration ${{ env.BUILD_CONFIGURATION }} --verbosity minimal > build-result.txt
+          echo ':heavy_check_mark: アプリケーションのビルドに成功しました。' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat build-result.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+  
+      - name: ビルド失敗時の結果表示
+        if: ${{ steps.application-build.conclusion == 'failure' }}
+        run: |
+          echo ':x: アプリケーションのビルドに失敗しました。  ' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat build-result.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          exit 1
   
       - name: 単体テストの実行
-        id: execute-unit-test
+        id: run-unit-test
         continue-on-error: true
-        run: dotnet test --no-build --nologo --logger "trx;LogFileName=${{ matrix.vm_image }}-${{ matrix.framework_version }}.trx" --logger:"console;verbosity=minimal" --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} --collect "XPlat Code Coverage" > unit-test-result.txt
-
-      - name: テスト結果のサマリー表示
-        shell: bash
         run: |
           echo '## Test Result :memo:' >> $GITHUB_STEP_SUMMARY
+          dotnet test --no-build --nologo --logger "trx;LogFileName=${{ matrix.vm_image }}-${{ matrix.framework_version }}.trx" --logger:"console;verbosity=minimal" --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} --collect "XPlat Code Coverage" > unit-test-result.txt
+          echo ':heavy_check_mark: アプリケーションの単体テストに成功しました。' >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat unit-test-result.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: 単体テスト失敗時の結果表示
+        if: ${{ steps.run-unit-test.conclusion == 'failure' }}
+        run: |
+          echo ':x: アプリケーションの単体テストに失敗しました。  ' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat unit-test-result.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo 'TEST_STATUS=Error' >> $GITHUB_ENV
     
       - id: create-coverage-report
         name: コードカバレッジレポートの解析
@@ -77,3 +93,7 @@ jobs:
           name: unit-test-results-${{ matrix.vm_image }}-${{ matrix.framework_version }}
           path: tests/Test.TsunaCan.HelloWorld/TestResults/
           retention-days: 1
+
+      - name: ビルドと単体テスト結果の確認
+        if: ${{ env.TEST_STATUS == 'Error' }}
+        run: exit 1
