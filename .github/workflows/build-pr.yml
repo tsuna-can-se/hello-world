@@ -45,7 +45,7 @@ jobs:
   
       - name: ビルド失敗時の結果表示
         shell: bash
-        if: ${{ steps.application-build.conclusion == 'failure' }}
+        if: ${{ steps.application-build.outcome == 'failure' }}
         run: |
           echo ':x: アプリケーションのビルドに失敗しました。  ' >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
@@ -67,7 +67,7 @@ jobs:
 
       - name: 単体テスト失敗時の結果表示
         shell: bash
-        if: ${{ steps.run-unit-test.conclusion == 'failure' }}
+        if: ${{ steps.run-unit-test.outcome == 'failure' }}
         run: |
           echo ':x: アプリケーションの単体テストに失敗しました。  ' >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
