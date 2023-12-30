@@ -104,12 +104,21 @@ jobs:
           name: ${{ env.PACKAGE_ARTIFACT_NAME }}
 
       - name: NuGet パッケージの公開
+        id: release-to-nuget
+        continue-on-error: true
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
           NUGET_SOURCE: https://api.nuget.org/v3/index.json
-          LOG_FILE_NAME: nuget_push_log.txt
+        run: dotnet nuget push $PACKAGING_PROJECT_NAME.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source $NUGET_SOURCE --nologo > nuget_push_log.txt
+          
+      - name: NuGet パッケージの公開結果表示
+        shell: bash
         run: |
-          dotnet nuget push $PACKAGING_PROJECT_NAME.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source $NUGET_SOURCE --nologo > $LOG_FILE_NAME
-          cat $LOG_FILE_NAME
+          cat nuget_push_log.txt
           echo "# NuGet release info :toolbox:" >> $GITHUB_STEP_SUMMARY
-          cat $LOG_FILE_NAME >> $GITHUB_STEP_SUMMARY
+          cat nuget_push_log.txt >> $GITHUB_STEP_SUMMARY
+
+      - name: NuGet パッケージの公開結果判定
+        if: ${{ steps.release-to-nuget.outcome == 'failure' }}
+        run: exit 1
+  
