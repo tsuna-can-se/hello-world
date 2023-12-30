@@ -109,7 +109,7 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
           NUGET_SOURCE: https://api.nuget.org/v3/index.json
-        run: dotnet nuget push $PACKAGING_PROJECT_NAME.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source $NUGET_SOURCE --nologo > nuget_push_log.txt
+        run: dotnet nuget push $PACKAGING_PROJECT_NAME.${{ needs.packaging.outputs.file_version }}.nupkg --api-key $NUGET_API_KEY --source $NUGET_SOURCE > nuget_push_log.txt
           
       - name: NuGet パッケージの公開結果表示
         shell: bash
