@@ -1,0 +1,18 @@
+changelog:
+  categories:
+    - title: '🏕 Features'
+      labels:
+        - '*'
+      exclude:
+        labels:
+          - dependencies
+    - title: '👒 Package dependencies'
+      labels:
+        - dependencies
+      exclude:
+        labels:
+          - CI/CD
+    - title: ':octocat: GitHub actions dependencies'
+      labels:
+        - dependencies
+        - CI/CD
