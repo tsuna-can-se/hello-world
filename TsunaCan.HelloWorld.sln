@@ -18,6 +18,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{B8D57FEB-5963-46D9-8A92-F0A156A4B610}"
+	ProjectSection(SolutionItems) = preProject
+		.github\dependabot.yml = .github\dependabot.yml
+		.github\release.yml = .github\release.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{BF6F1338-0F64-43C9-A2B0-D93A8D4F8C18}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-pr.yml = .github\workflows\build-pr.yml
+		.github\workflows\codeql.yml = .github\workflows\codeql.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +52,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{330EC5F9-F96A-459F-BBCB-B792F99E211D} = {D1FEA00E-82AD-42DC-800B-A7772807FD1E}
 		{ADD8FA85-5FF7-487B-8D0E-89EA34CC65A3} = {241D11E3-DE26-4FE8-974F-BD19B201BDDC}
+		{B8D57FEB-5963-46D9-8A92-F0A156A4B610} = {493E6E35-7F30-4FAA-8515-FEEFECCADCB1}
+		{BF6F1338-0F64-43C9-A2B0-D93A8D4F8C18} = {B8D57FEB-5963-46D9-8A92-F0A156A4B610}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DD375F8-BC58-4273-A2B0-52DDD984E131}
