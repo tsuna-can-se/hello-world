@@ -13,13 +13,15 @@ jobs:
       fail-fast: false
       matrix:
         vm_image: [ubuntu-latest, windows-latest]
-        framework_version: [net48, net8.0]
+        framework_version: [net48, net8.0, net9.0]
         exclude:
           - vm_image: ubuntu-latest
             framework_version: net48
         include:
           - framework_version: net8.0
-            dotnet-sdk-version: 8.0.x  
+            dotnet-sdk-version: 8.0.x
+          - framework_version: net9.0
+            dotnet-sdk-version: 9.0.x
 
     runs-on: ${{ matrix.vm_image }}
    
