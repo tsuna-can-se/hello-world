@@ -90,7 +90,7 @@ jobs:
         name: コードカバレッジレポートの解析
         uses: danielpalme/ReportGenerator-GitHub-Action@5
         with:
-          reports: '**/TestResults/*/coverage.cobertura.xml'
+          reports: '**/TestResults/coverage.cobertura.xml'
           targetdir: 'CoverageReport'
           reporttypes: 'MarkdownSummaryGithub'
     
