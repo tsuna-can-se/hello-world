@@ -117,5 +117,5 @@ jobs:
           retention-days: 1
 
       - name: 単体テスト結果の確認
-        if: ${{ env.TEST_STATUS == 'Error' }}
+        if: ${{ steps.create-test-result-report.conclusion == 'failure' }}
         run: exit 1
