@@ -73,22 +73,25 @@ jobs:
         continue-on-error: true
         run: |
           echo '## Test Result :memo:' >> $GITHUB_STEP_SUMMARY
-          dotnet test --no-build --nologo --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} -- --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml --report-xunit-trx --report-xunit-trx-filename ${{ matrix.vm_image }}-${{ matrix.framework_version }}.trx > unit-test-result.txt
-          echo ':heavy_check_mark: アプリケーションの単体テストに成功しました。' >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          cat unit-test-result.txt >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          dotnet test --no-build --nologo --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} -- --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml --report-xunit-trx --report-xunit-trx-filename ${{ matrix.vm_image }}-${{ matrix.framework_version }}.trx
 
-      - name: 単体テスト失敗時の結果表示
-        shell: bash
-        if: ${{ steps.run-unit-test.outcome == 'failure' }}
-        run: |
-          echo ':x: アプリケーションの単体テストに失敗しました。  ' >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          cat unit-test-result.txt >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo 'TEST_STATUS=Error' >> $GITHUB_ENV
-    
+      - id: create-test-result-report
+        name: テスト結果ページの作成
+        uses: dorny/test-reporter@v2
+        with:
+          name: 'Test results ${{ matrix.framework_version }} on ${{ matrix.vm_image }}'
+          path: '**/TestResults/${{ matrix.vm_image }}-${{ matrix.framework_version }}.trx'
+          path-replace-backslashes: 'true'
+          reporter: 'dotnet-trx'
+          only-summary: 'false'
+          use-actions-summary: 'true'
+          badge-title: 'tests'
+          list-suites: 'failed'
+          list-tests: 'failed'
+          max-annotations: '10'
+          fail-on-error: 'false'
+          fail-on-empty: 'true'
+
       - id: create-coverage-report
         name: コードカバレッジレポートの解析
         uses: danielpalme/ReportGenerator-GitHub-Action@5
@@ -113,5 +116,5 @@ jobs:
           retention-days: 1
 
       - name: 単体テスト結果の確認
-        if: ${{ env.TEST_STATUS == 'Error' }}
+        if: ${{ steps.create-test-result-report.outputs.conclusion == 'failure' }}
         run: exit 1
