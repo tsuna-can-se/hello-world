@@ -21,7 +21,7 @@ namespace Test.TsunaCan.HelloWorld
                 stream.Position = 0;
                 using (var reader = new StreamReader(stream))
                 {
-                    Assert.Equal(" ###  ###            ###   ###             ## imvalid", reader.ReadLine());
+                    Assert.Equal(" ###  ###            ###   ###             ## ", reader.ReadLine());
                     Assert.Equal("  ##  ##              ##    ##             ## ", reader.ReadLine());
                     Assert.Equal("  ##  ##    ######    ##    ##    ######   ## ", reader.ReadLine());
                     Assert.Equal("  ######   ##    ##   ##    ##   ##    ##  ## ", reader.ReadLine());
