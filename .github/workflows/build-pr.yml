@@ -74,20 +74,6 @@ jobs:
         run: |
           dotnet test --no-build --nologo --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} --framework ${{ matrix.framework_version }} -- --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml --report-xunit-trx --report-xunit-trx-filename ${{ matrix.vm_image }}-${{ matrix.framework_version }}.trx
           echo '## Test Result :memo:' >> $GITHUB_STEP_SUMMARY
-          # echo ':heavy_check_mark: アプリケーションの単体テストに成功しました。' >> $GITHUB_STEP_SUMMARY
-          # echo '```' >> $GITHUB_STEP_SUMMARY
-          # cat unit-test-result.txt >> $GITHUB_STEP_SUMMARY
-          # echo '```' >> $GITHUB_STEP_SUMMARY
-
-      # - name: 単体テスト失敗時の結果表示
-      #   shell: bash
-      #   if: ${{ steps.run-unit-test.outcome == 'failure' }}
-      #   run: |
-      #     echo ':x: アプリケーションの単体テストに失敗しました。  ' >> $GITHUB_STEP_SUMMARY
-      #     echo '```' >> $GITHUB_STEP_SUMMARY
-      #     cat unit-test-result.txt >> $GITHUB_STEP_SUMMARY
-      #     echo '```' >> $GITHUB_STEP_SUMMARY
-      #     echo 'TEST_STATUS=Error' >> $GITHUB_ENV
 
       - id: create-test-result-report
         name: テスト結果ページの作成
@@ -106,14 +92,6 @@ jobs:
           max-annotations: '10'
           fail-on-error: 'true'
           fail-on-empty: 'true'
-
-      # - name: テスト結果のサマリー表示
-      #   shell: bash
-      #   if: ${{ success() || (failure() && steps.run-unit-test.conclusion == 'failure') }}
-      #   run: |
-      #     echo '## Test Result :memo:' >> $GITHUB_STEP_SUMMARY
-      #     echo 'Test was a **${{ steps.create-test-result-report.outputs.conclusion }}**.' >> $GITHUB_STEP_SUMMARY
-      #     echo 'Completed in ${{ steps.create-test-result-report.outputs.time }}ms with **${{ steps.create-test-result-report.outputs.passed }}** passed, **${{ steps.create-test-result-report.outputs.failed }}** failed and ${{ steps.create-test-result-report.outputs.skipped }} skipped.' >> $GITHUB_STEP_SUMMARY
 
       - id: create-coverage-report
         name: コードカバレッジレポートの解析
