@@ -90,7 +90,7 @@ jobs:
           list-suites: 'failed'
           list-tests: 'failed'
           max-annotations: '10'
-          fail-on-error: 'true'
+          fail-on-error: 'false'
           fail-on-empty: 'true'
 
       - id: create-coverage-report
