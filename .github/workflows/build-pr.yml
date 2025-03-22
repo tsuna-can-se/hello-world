@@ -21,6 +21,9 @@ jobs:
           - framework_version: net8.0
           - framework_version: net9.0
 
+    permissions:
+      contents: read
+
     runs-on: ${{ matrix.vm_image }}
    
     env:
