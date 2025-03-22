@@ -6,6 +6,7 @@ changelog:
       exclude:
         labels:
           - dependencies
+          - chore
     - title: '👒 Package dependencies'
       labels:
         - dependencies
@@ -16,3 +17,6 @@ changelog:
       labels:
         - dependencies
         - CI/CD
+    - title: ':construction: Chores'
+      labels:
+        - chore
