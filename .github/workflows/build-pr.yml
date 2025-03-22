@@ -100,7 +100,7 @@ jobs:
           reporter: 'dotnet-trx'
           only-summary: 'false'
           use-actions-summary: 'true'
-          badge-title: 'tests ${{ matrix.framework_version }} on ${{ matrix.vm_image }}'
+          badge-title: 'tests'
           list-suites: 'failed'
           list-tests: 'failed'
           max-annotations: '10'
