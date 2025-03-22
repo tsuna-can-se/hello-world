@@ -84,7 +84,7 @@ jobs:
           path: '**/TestResults/${{ matrix.vm_image }}-${{ matrix.framework_version }}.trx'
           path-replace-backslashes: 'true'
           reporter: 'dotnet-trx'
-          only-summary: 'true'
+          only-summary: 'false'
           use-actions-summary: 'true'
           badge-title: 'tests'
           list-suites: 'failed'
