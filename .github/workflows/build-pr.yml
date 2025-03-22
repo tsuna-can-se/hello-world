@@ -78,7 +78,6 @@ jobs:
       - id: create-test-result-report
         name: テスト結果ページの作成
         uses: dorny/test-reporter@v2
-        if: ${{ success() || (failure() && steps.run-unit-test.conclusion == 'failure') }}
         with:
           name: 'Test results ${{ matrix.framework_version }} on ${{ matrix.vm_image }}'
           path: '**/TestResults/${{ matrix.vm_image }}-${{ matrix.framework_version }}.trx'
