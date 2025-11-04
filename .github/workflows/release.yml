@@ -47,7 +47,7 @@ jobs:
           echo "file_version=$file_version" >> $GITHUB_OUTPUT
 
       - name: ブランチのチェックアウト
-        uses: actions/checkout@v5
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 1
           
@@ -57,7 +57,7 @@ jobs:
           dotnet pack ./src/$PACKAGING_PROJECT_NAME/$PACKAGING_PROJECT_NAME.csproj --configuration $BUILD_CONFIGURATION --output $PACKAGE_ARTIFACT_NAME -p:PackageVersion=$file_version -p:Version=$file_version -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
       - name: ビルドアーティファクトのアップロード
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: ${{ env.PACKAGE_ARTIFACT_NAME }}
           path: ${{ env.PACKAGE_ARTIFACT_NAME }}/
@@ -72,7 +72,7 @@ jobs:
 
     steps:
       - name: ビルドアーティファクトのダウンロード
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: ${{ env.PACKAGE_ARTIFACT_NAME }}
 
@@ -104,13 +104,13 @@ jobs:
 
     steps:
       - name: ビルドアーティファクトのダウンロード
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: ${{ env.PACKAGE_ARTIFACT_NAME }}
       
       - id: create-github-release
         name: GitHub のリリース作成
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@6da8fa9354ddfdc4aeace5fc48d7f679b5214090 # v2.4.1
         with:
           files: |
             *.nupkg
