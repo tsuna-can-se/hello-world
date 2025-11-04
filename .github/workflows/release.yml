@@ -72,7 +72,7 @@ jobs:
 
     steps:
       - name: ビルドアーティファクトのダウンロード
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: ${{ env.PACKAGE_ARTIFACT_NAME }}
 
@@ -104,7 +104,7 @@ jobs:
 
     steps:
       - name: ビルドアーティファクトのダウンロード
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: ${{ env.PACKAGE_ARTIFACT_NAME }}
       
