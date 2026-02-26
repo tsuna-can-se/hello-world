@@ -57,7 +57,7 @@ jobs:
           dotnet pack ./src/$PACKAGING_PROJECT_NAME/$PACKAGING_PROJECT_NAME.csproj --configuration $BUILD_CONFIGURATION --output $PACKAGE_ARTIFACT_NAME -p:PackageVersion=$file_version -p:Version=$file_version -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
       - name: ビルドアーティファクトのアップロード
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ${{ env.PACKAGE_ARTIFACT_NAME }}
           path: ${{ env.PACKAGE_ARTIFACT_NAME }}/
